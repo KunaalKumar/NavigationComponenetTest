@@ -3,6 +3,7 @@ package com.example.memoryleaktest
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
@@ -20,6 +21,14 @@ class MainActivity : AppCompatActivity() {
         nav =  Navigation.getInstance(supportFragmentManager)
 
         nav.pushFragment(FirstFragment(), savedInstanceState == null)
+
+        bottom_nav_bar.setOnNavigationItemSelectedListener {
+            when(it.itemId) {
+                R.id.first_item -> nav.pushFragment(FirstFragment())
+                R.id.second_item -> nav.pushFragment(SecondFragment())
+            }
+            return@setOnNavigationItemSelectedListener true
+        }
     }
 
     override fun onPause() {

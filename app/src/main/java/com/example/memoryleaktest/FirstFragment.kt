@@ -7,11 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_first.*
 
-/**
- * A simple [Fragment] subclass.
- * Use the [FirstFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class FirstFragment : Fragment() {
 
     private val nav: Navigation by lazy {
@@ -38,13 +33,12 @@ class FirstFragment : Fragment() {
             counter.text = mCounter.toString()
         }
 
-        view.setOnClickListener {
-            nav.pushFragment(SecondFragment())
-        }
-
         button.setOnClickListener {
             mCounter++
             counter.text = mCounter.toString()
+        }
+
+        view.setOnClickListener {
         }
     }
 

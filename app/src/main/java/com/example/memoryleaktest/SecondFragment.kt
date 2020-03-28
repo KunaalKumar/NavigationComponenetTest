@@ -5,18 +5,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.fragment_first.*
+import kotlinx.android.synthetic.main.fragment_second.*
 
-/**
- * A simple [Fragment] subclass.
- * Use the [FirstFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SecondFragment: Fragment() {
 
     private val nav: Navigation by lazy {
         Navigation.getInstance()
     }
+
+    private var mCounter = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,8 +26,24 @@ class SecondFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        view.setOnClickListener {
-            nav.pushFragment(FirstFragment())
+        counter.text = mCounter.toString()
+
+        savedInstanceState?.let {
+            mCounter = it.getInt("Counter")
+            counter.text = mCounter.toString()
         }
+
+        button.setOnClickListener {
+            mCounter++
+            counter.text = mCounter.toString()
+        }
+
+        view.setOnClickListener {
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt("Counter", mCounter)
     }
 }
