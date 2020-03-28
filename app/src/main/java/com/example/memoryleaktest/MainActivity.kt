@@ -11,19 +11,19 @@ import kotlin.reflect.KClass
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var nav: Navigation
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val nav =  Navigation.getInstance(supportFragmentManager)
+        nav =  Navigation.getInstance(supportFragmentManager)
 
         nav.pushFragment(FirstFragment())
     }
 
-//    private fun popFragment() {
-//        supportFragmentManager.beginTransaction()
-//                .replace(R.id.fragment_container, backStack.pop())
-//                .commit()
-//    }
+    override fun onPause() {
+        super.onPause()
+        nav.onFragmentManagerDestroy()
+    }
 }

@@ -24,14 +24,6 @@ object Navigation {
     }
 
     fun pushFragment(fragment: Fragment) {
-        // Save state of current fragment before replacing with new
-        val currentFragment = fragmentManager.findFragmentById(R.id.fragment_container)
-
-        // If there is a fragment that doesn't exist in the stack, save it
-        if(currentFragment != null && !fragmentStateMap.containsKey(fragment.javaClass.kotlin)) {
-            fragmentStateMap[currentFragment.javaClass.kotlin] =
-                fragmentManager.saveFragmentInstanceState(currentFragment)
-        }
         //TODO: Check for if current fragment is the same as to-be-replaced fragment
 
         // Restore state if previous fragment state exists
@@ -43,5 +35,15 @@ object Navigation {
         fragmentManager.beginTransaction()
             .replace(R.id.fragment_container, fragment)
             .commit()
+    }
+
+    // Stores state of current fragment
+    // To be called from MainActivtiy
+    fun onFragmentManagerDestroy() {
+        val currentFragment = fragmentManager.findFragmentById(R.id.fragment_container)
+        if (currentFragment != null) {
+            fragmentStateMap[currentFragment.javaClass.kotlin] =
+                fragmentManager.saveFragmentInstanceState(currentFragment)
+        }
     }
 }
