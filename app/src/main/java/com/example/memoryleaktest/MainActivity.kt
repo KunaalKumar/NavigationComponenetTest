@@ -40,4 +40,9 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         nav.onFragmentManagerDestroy()
     }
+
+    override fun onBackPressed() {
+        if(!nav.popFragment())
+            super.onBackPressed()
+    }
 }

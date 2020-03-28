@@ -6,6 +6,7 @@ import java.util.*
 import kotlin.collections.HashMap
 import kotlin.reflect.KClass
 
+// Navigation component with fragments which can have only one instance
 object Navigation {
 
     private var fragmentManager: FragmentManager? = null
@@ -48,6 +49,21 @@ object Navigation {
             ?.commit()
     }
 
+    // Returns true if handled, false otherwise
+    fun popFragment() : Boolean {
+        if(backStack.size > 1) {
+            backStack.pop()
+            val fragmentToShow = backStack.pop().java.newInstance()
+            fragmentToShow.setInitialSavedState(fragmentStateMap[fragmentToShow.javaClass.kotlin])
+            fragmentManager?.beginTransaction()
+                ?.replace(R.id.fragment_container, fragmentToShow)
+                ?.commitNow()
+            return true
+        }
+        return false
+    }
+
+    // Save current fragment state in fragmentStateMap
     fun saveCurrentFragmentState() {
         val currentFragment = fragmentManager?.findFragmentById(R.id.fragment_container)
         if (currentFragment != null) {
@@ -57,7 +73,7 @@ object Navigation {
     }
 
     // Stores state of current fragment and loses fragmentManager reference
-    // To be called from MainActivtiy
+    // To be called from MainActivity
     fun onFragmentManagerDestroy() {
         fragmentManager = null
     }
