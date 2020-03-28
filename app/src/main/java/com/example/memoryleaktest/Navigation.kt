@@ -24,7 +24,9 @@ object Navigation {
     }
 
     fun pushFragment(fragment: Fragment, saveState: Boolean = true) {
-        //TODO: Check for if current fragment is the same as to-be-replaced fragment
+        // Nothing to do if current fragment is the same as to-be-replaced fragment
+        if(backStack.isNotEmpty() && backStack.peek() == fragment::class)
+            return
 
         if(saveState)
             saveCurrentFragmentState()
@@ -32,6 +34,11 @@ object Navigation {
         // Restore state if previous fragment state exists
         if(fragmentStateMap.containsKey(fragment.javaClass.kotlin)) {
             fragment.setInitialSavedState(fragmentStateMap[fragment.javaClass.kotlin])
+        }
+
+        // If fragment was found in memory, remove it
+        if(backStack.contains(fragment::class)) {
+            backStack.remove(fragment::class)
         }
 
         backStack.push(fragment.javaClass.kotlin)
