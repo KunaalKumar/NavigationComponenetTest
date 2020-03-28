@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
 
         nav =  Navigation.getInstance(supportFragmentManager)
 
-        nav.pushFragment(FirstFragment())
+        nav.pushFragment(FirstFragment(), savedInstanceState == null)
     }
 
     override fun onPause() {
