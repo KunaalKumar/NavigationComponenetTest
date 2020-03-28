@@ -41,7 +41,7 @@ object Navigation {
             ?.commit()
     }
 
-    private fun saveCurrentFragmentState() {
+    fun saveCurrentFragmentState() {
         val currentFragment = fragmentManager?.findFragmentById(R.id.fragment_container)
         if (currentFragment != null) {
             fragmentStateMap[currentFragment.javaClass.kotlin] =
@@ -52,7 +52,6 @@ object Navigation {
     // Stores state of current fragment and loses fragmentManager reference
     // To be called from MainActivtiy
     fun onFragmentManagerDestroy() {
-        saveCurrentFragmentState()
         fragmentManager = null
     }
 }

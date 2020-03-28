@@ -24,6 +24,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
+        nav.saveCurrentFragmentState()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
         nav.onFragmentManagerDestroy()
     }
 }
