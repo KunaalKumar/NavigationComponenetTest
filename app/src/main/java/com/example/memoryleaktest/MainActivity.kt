@@ -20,12 +20,12 @@ class MainActivity : AppCompatActivity() {
 
         nav =  Navigation.getInstance(supportFragmentManager)
 
-        nav.pushFragment(FirstFragment(), savedInstanceState == null)
+        nav.pushFragment(FirstFragment(), savedInstanceState == null, Navigation.TabIdentifiers.FIRST)
 
         bottom_nav_bar.setOnNavigationItemSelectedListener {
             when(it.itemId) {
-                R.id.first_item -> nav.pushFragment(FirstFragment())
-                R.id.second_item -> nav.pushFragment(SecondFragment())
+                R.id.first_item -> nav.pushFragment(FirstFragment(), tab = Navigation.TabIdentifiers.FIRST)
+                R.id.second_item -> nav.pushFragment(SecondFragment(), tab = Navigation.TabIdentifiers.SECOND)
             }
             return@setOnNavigationItemSelectedListener true
         }
@@ -43,6 +43,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         if(!nav.popFragment())
-            super.onBackPressed()
+            finishAffinity()
     }
 }
