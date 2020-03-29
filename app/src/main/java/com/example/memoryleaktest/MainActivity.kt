@@ -22,12 +22,12 @@ class MainActivity : AppCompatActivity() {
         nav =  Navigation.getInstance(supportFragmentManager, bottom_nav_bar)
 
         if(savedInstanceState == null) {
-            nav.pushFragment(FirstFragment(), Navigation.TabIdentifiers.FIRST, false)
+            // Load first/home fragment on start
+            nav.loadTab(Navigation.TabIdentifiers.FIRST)
         } else {
             // Restore view state
             nav.showTab()
         }
-
     }
 
     override fun onPause() {

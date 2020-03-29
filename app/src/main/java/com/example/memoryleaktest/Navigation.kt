@@ -43,7 +43,6 @@ object Navigation {
         return instance
     }
 
-
     private fun setupBottomNavBar() {
         bottomNavBar?.setOnNavigationItemSelectedListener {
             when(it.itemId) {
@@ -56,7 +55,13 @@ object Navigation {
     }
 
     // Loads tab stack into current view, makes a new parent tab fragment if stack is null
-    private fun loadTab(tabIdentifier: TabIdentifiers) {
+    fun loadTab(tabIdentifier: TabIdentifiers) {
+        // Manage tabStack
+        // Add to tabStack
+        if(tabStack.contains(tabIdentifier))
+            tabStack.remove(tabIdentifier)
+        tabStack.add(tabIdentifier)
+
         if(tabBackStack[tabIdentifier].isNullOrEmpty()) {
             when(tabIdentifier) {
                 TabIdentifiers.FIRST -> pushFragment(FirstFragment(), tabIdentifier)
@@ -72,7 +77,7 @@ object Navigation {
      * saveState: Whether or not to save previous fragment state
      * tab: Tab to put fragment into
      */
-    fun pushFragment(fragment: Fragment, tab: TabIdentifiers, savePreviousFragmentState: Boolean = true) {
+    fun pushFragment(fragment: Fragment, tab: TabIdentifiers) {
 
         Log.d("HOAL", "Putting ${fragment.javaClass.name} into ${currentTab.name}")
 
@@ -86,18 +91,11 @@ object Navigation {
                 return
         }
 
-        // Manage tabStack
-        // Add to tabStack
-        if(tabStack.contains(tab))
-            tabStack.remove(tab)
-        tabStack.add(tab)
-
         currentTab = tab
         val backStack = tabBackStack[currentTab]!!
 
         // Save current fragment state
-        if(savePreviousFragmentState)
-            saveCurrentFragmentState()
+        saveCurrentFragmentState()
 
         // Restore state if previous fragment state exists
         if(fragmentStateMap.containsKey(fragment.javaClass.kotlin)) {
@@ -142,7 +140,13 @@ object Navigation {
             return if(tabStack.size > 1) {
                 tabStack.pop()
                 currentTab = tabStack.peek()
-                showTab(currentTab)
+
+                // onItemSelected listener will be called
+                bottomNavBar?.selectedItemId =
+                    when(currentTab) {
+                        TabIdentifiers.FIRST -> R.id.first_item
+                        TabIdentifiers.SECOND -> R.id.second_item
+                    }
                 true
             } else {
                 // Clear out backstack if not empty
