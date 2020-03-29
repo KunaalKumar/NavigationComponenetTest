@@ -39,6 +39,7 @@ class FirstFragment : Fragment() {
         }
 
         view.setOnClickListener {
+            nav.pushFragment(FirstChildFragment(), tab = Navigation.TabIdentifiers.FIRST)
         }
     }
 

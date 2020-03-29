@@ -13,27 +13,27 @@ import kotlin.reflect.KClass
 class MainActivity : AppCompatActivity() {
 
     private lateinit var nav: Navigation
+    private var endActivtiy = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        nav =  Navigation.getInstance(supportFragmentManager)
+        nav =  Navigation.getInstance(supportFragmentManager, bottom_nav_bar)
 
-        nav.pushFragment(FirstFragment(), savedInstanceState == null, Navigation.TabIdentifiers.FIRST)
-
-        bottom_nav_bar.setOnNavigationItemSelectedListener {
-            when(it.itemId) {
-                R.id.first_item -> nav.pushFragment(FirstFragment(), tab = Navigation.TabIdentifiers.FIRST)
-                R.id.second_item -> nav.pushFragment(SecondFragment(), tab = Navigation.TabIdentifiers.SECOND)
-            }
-            return@setOnNavigationItemSelectedListener true
+        if(savedInstanceState == null) {
+            nav.pushFragment(FirstFragment(), Navigation.TabIdentifiers.FIRST, false)
+        } else {
+            // Restore view state
+            nav.showTab()
         }
+
     }
 
     override fun onPause() {
         super.onPause()
-        nav.saveCurrentFragmentState()
+        if(!endActivtiy)
+            nav.saveCurrentFragmentState()
     }
 
     override fun onDestroy() {
@@ -42,7 +42,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if(!nav.popFragment())
+        if(!nav.popFragment()){
+            endActivtiy = true
             finishAffinity()
+        }
     }
 }
